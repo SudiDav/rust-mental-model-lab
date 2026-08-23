@@ -23,6 +23,8 @@ describe('application shell', () => {
     expect(screen.getByRole('heading', { name: /why build a mental model/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /rust compared with typescript and c#/i })).toBeInTheDocument();
     expect(screen.getByText(/compiler checks ownership, borrowing, and lifetimes/i)).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /text-first lesson/i })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /learning loop animation/i })).toBeInTheDocument();
   });
 
   it('renders an MDX lesson and its simulation workspace', () => {

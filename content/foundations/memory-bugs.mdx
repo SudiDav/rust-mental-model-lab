@@ -1,0 +1,70 @@
+---
+id: memory-bugs
+title: Memory Bugs
+world: memory-bugs
+order: 1
+difficulty: beginner
+estimatedMinutes: 22
+prerequisites:
+  - pointers-references
+objectives:
+  - Recognize dangling pointers, use-after-free, double-free, leaks, and data races.
+  - Connect each bug to the broken relationship in the memory model.
+concepts:
+  - dangling pointer
+  - use-after-free
+  - double-free
+  - leak
+  - data race
+simulation:
+  type: none
+  scenario: text-first
+status: published
+---
+
+# Memory Bugs
+
+Memory bugs are not mysterious computer curses. They are broken relationships between data, access, and time.
+
+<Concept>Most memory bugs can be restated as one of three questions: “Who owns this?”, “Is this access still valid?”, or “Can these accesses happen at the same time?”</Concept>
+
+## The bug family
+
+| Bug | What went wrong | The question we should have asked |
+| --- | --- | --- |
+| Dangling pointer | An address still exists after the value it points to is gone | Is the owner still alive? |
+| Use-after-free | Code accesses an allocation after cleanup | Has this resource already been released? |
+| Double-free | Two cleanup paths both believe they own the same allocation | Is there exactly one cleanup responsibility? |
+| Memory leak | An allocation stays alive even though the program can no longer reach it | Who will eventually release it? |
+| Data race | Conflicting accesses happen at the same time without synchronization | Can these accesses overlap safely? |
+
+## Why familiar languages make different trade-offs
+
+In C, the programmer has direct responsibility for allocation and cleanup. That gives control, but an incorrect pointer relationship can compile and fail later.
+
+In TypeScript and C#, ordinary object memory is managed by a runtime and garbage collector. That removes an entire category of manual cleanup decisions, though it does not remove every resource problem or every race.
+
+Rust puts more of the relationship into the type system and compiler. The program may take more precision to write, but many invalid states are rejected before the program runs.
+
+<MentalModel>Rust's safety story is not “the compiler knows everything about your program.” It is “the compiler requires you to make ownership and access relationships consistent enough to check.”</MentalModel>
+
+## A dangling reference in plain language
+
+```text
+1. Create an owner.
+2. Create an access path to the owner's value.
+3. End the owner's lifetime.
+4. Try to use the old access path.
+```
+
+The dangerous part is step 4. The old path may still look like an address, but the bytes no longer belong to the original value. Rust's borrowing rules are designed to make step 4 unrepresentable in safe code.
+
+<Reveal>“The pointer still exists” does not mean “the pointer is still valid.” Validity is a relationship between an access path and the lifetime of the value it is supposed to reach.</Reveal>
+
+<Predict question="Which relationship is broken by a use-after-free?" options={["The value has too many names", "Access continues after ownership ended", "The CPU is too slow"]} answer="Access continues after ownership ended" />
+
+<UnderTheHood>Rust does not prevent all bugs. Logic errors, incorrect protocols, unsafe code, and external systems can still be wrong. Its core memory guarantees target invalid access and unsynchronized aliasing in safe code.</UnderTheHood>
+
+<Challenge id="memory-bugs-01" />
+
+<MasteryCheck />

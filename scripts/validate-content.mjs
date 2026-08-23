@@ -3,9 +3,11 @@ import path from 'node:path';
 import matter from 'gray-matter';
 
 const root = path.resolve('content');
-const expectedPublished = new Set(['start-here', 'bits-and-bytes', 'cpu-and-memory', 'program-memory', 'stack-and-heap']);
-const plannedIds = new Set([
+const expectedPublished = new Set([
+  'start-here', 'bits-and-bytes', 'cpu-and-memory', 'program-memory', 'stack-and-heap',
   'pointers-references', 'memory-bugs', 'why-rust', 'ownership-introduction', 'borrowing-introduction',
+]);
+const plannedIds = new Set([
   'mutable-borrowing', 'borrow-checker', 'lifetimes-introduction', 'slices', 'smart-pointers',
   'reference-counting', 'concurrency', 'async-rust', 'unsafe-rust',
 ]);

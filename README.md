@@ -6,7 +6,8 @@ The first milestone includes:
 
 - an MDX-driven lesson workspace;
 - a curriculum map for Worlds 0–17;
-- a human orientation lesson followed by interactive lessons for Worlds 0–3;
+- a human orientation lesson followed by first-principles lessons through World 8;
+- interactive models for Worlds 0–3, with text-first MDX lessons carrying the path forward while later visualizers are built;
 - deterministic simulations for bits, memory hierarchy, process memory, and stack/heap;
 - local browser progress through `localStorage`;
 - a static GitHub Pages deployment workflow.

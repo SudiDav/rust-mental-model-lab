@@ -1,0 +1,76 @@
+---
+id: borrowing-introduction
+title: Borrowing
+world: borrowing
+order: 1
+difficulty: beginner
+estimatedMinutes: 28
+prerequisites:
+  - ownership-introduction
+objectives:
+  - Distinguish borrowing from moving and cloning.
+  - Explain why a reference must never outlive the value it observes.
+concepts:
+  - shared borrow
+  - mutable borrow
+  - aliasing
+  - reference validity
+simulation:
+  type: none
+  scenario: text-first
+status: published
+---
+
+# Borrowing
+
+Ownership makes one part of the program responsible for a value. Borrowing lets another part use the value temporarily without taking that responsibility away.
+
+```rust
+fn print_length(text: &String) {
+    println!("{}", text.len());
+}
+
+let message = String::from("hello");
+print_length(&message);
+println!("{message}");
+```
+
+The function receives a shared reference. It can inspect the string, but it cannot destroy the owner's responsibility or keep using the reference after the owner becomes invalid.
+
+<Concept>Borrowing is temporary access. Moving transfers ownership. Cloning creates another value. These are three different operations with three different costs and guarantees.</Concept>
+
+## Shared access and exclusive access
+
+Rust uses a simple discipline:
+
+- many shared readers are allowed at the same time;
+- one mutable writer is allowed, with no other active readers or writers.
+
+```rust
+let mut message = String::from("hello");
+
+let first = &message;
+let second = &message;
+println!("{first} {second}");
+
+let editable = &mut message;
+editable.push('!');
+```
+
+The first two references are compatible because neither changes the string. The mutable borrow must wait until the shared borrows are no longer used.
+
+<MentalModel>Imagine a document in a library. Many people may read it together. If someone needs to edit it, the reading room must temporarily become exclusive so nobody is reading a changing document at the same time.</MentalModel>
+
+## Why not just let the programmer promise?
+
+In TypeScript or C#, you can pass references freely and rely on conventions, runtime behavior, or locks when mutation becomes complicated. Rust makes the access contract part of the type-checked program.
+
+That can feel strict. The strictness is useful because aliasing and mutation are where many hard-to-reproduce bugs begin.
+
+<Predict question="Which access pattern is allowed simultaneously?" options={["Two shared immutable borrows", "A shared borrow and a mutable borrow", "Two mutable borrows"]} answer="Two shared immutable borrows" />
+
+<UnderTheHood>Rust's borrow checker reasons about when a reference is actually used, not only where the variable was declared. This is why a reference can sometimes be created in a larger scope and still be valid for a shorter portion of the program.</UnderTheHood>
+
+<Challenge id="borrowing-introduction-01" />
+
+<MasteryCheck />

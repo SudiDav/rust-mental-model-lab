@@ -1,0 +1,81 @@
+---
+id: pointers-references
+title: Pointers and References
+world: pointers-references
+order: 1
+difficulty: beginner
+estimatedMinutes: 20
+prerequisites:
+  - stack-and-heap
+objectives:
+  - Distinguish an address, a pointer, a reference, and the value being referenced.
+  - Explain why access through a reference does not transfer ownership.
+concepts:
+  - address
+  - pointer
+  - reference
+  - dereference
+  - aliasing
+simulation:
+  type: none
+  scenario: text-first
+status: published
+---
+
+# Pointers and References
+
+You have already seen that a variable can describe bytes living somewhere else. Now we need to slow down and name the relationships precisely.
+
+An **address** identifies a location. A **pointer** is a value that contains or represents an address. A **reference** is a language-level promise that lets code access another value without becoming its owner.
+
+<Concept>A reference answers “how may I access this value?” Ownership answers “who is responsible for this value?” Those are related questions, but they are not the same question.</Concept>
+
+## One value, several ways to talk about it
+
+```rust
+let name = String::from("Sudi");
+let view = &name;
+println!("{view}");
+```
+
+The string data still has one owner: `name`. The variable `view` is a temporary route to that data. Reading through `view` does not create a second owner and does not require a second heap allocation.
+
+```text
+name ─────── owns ───────► heap bytes "Sudi"
+  ▲
+  │
+view ─────── borrows ────┘
+```
+
+## A bridge from TypeScript and C#
+
+In TypeScript, several variables can refer to the same object and the garbage collector keeps the object alive while it is reachable. In C#, ordinary objects are also managed by the .NET runtime. The reference is convenient, but the ownership story is usually implicit.
+
+Rust makes the relationship visible:
+
+| Question | Managed-language default | Rust's default model |
+| --- | --- | --- |
+| Who owns the value? | Usually tracked by the runtime | A specific variable or owner |
+| Can another function access it? | Pass a reference freely | Pass a borrow with rules |
+| Can the value be mutated? | Depends on the type and conventions | Shared and mutable access are checked |
+| When does cleanup happen? | Runtime-managed for ordinary memory | Deterministically when the owner ends |
+
+<MentalModel>Imagine a library book. Ownership is the person responsible for returning it. A reference is a temporary library card that lets you read it. Many people may read it, but that does not mean they each own a copy.</MentalModel>
+
+## The three questions to ask
+
+When you see `&value`, ask:
+
+1. What value is being observed?
+2. Who owns that value?
+3. Can the reference remain valid for the entire time it is used?
+
+The third question is the beginning of lifetime reasoning. We will not solve every lifetime problem yet; we are building the habit of looking for the relationship.
+
+<Predict question="What changes when `view` is created in the example above?" options={["The string is cloned", "A second owner is created", "A temporary access path is created"]} answer="A temporary access path is created" />
+
+<UnderTheHood>The diagrams use arrows to make relationships visible. Rust references are not simply raw addresses: the compiler also tracks whether access is valid, whether it conflicts with mutation, and whether it outlives the owner.</UnderTheHood>
+
+<Challenge id="pointers-references-01" />
+
+<MasteryCheck />

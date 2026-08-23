@@ -1,0 +1,95 @@
+---
+id: ownership-introduction
+title: Understanding Ownership
+world: ownership
+order: 1
+difficulty: beginner
+estimatedMinutes: 28
+prerequisites:
+  - why-rust
+objectives:
+  - Use the owner, value, scope, and cleanup model to explain moves.
+  - Predict which variable remains valid after a value is transferred.
+concepts:
+  - owner
+  - move
+  - scope
+  - drop
+  - Copy
+  - Clone
+simulation:
+  type: none
+  scenario: text-first
+status: published
+---
+
+# Understanding Ownership
+
+Ownership is Rust's way of answering a practical question: when a value needs cleanup, which part of the program is responsible for it?
+
+Rust's basic ownership rules are:
+
+1. Each value has an owner.
+2. There is one owner at a time.
+3. When the owner leaves its scope, the value is cleaned up.
+
+<MentalModel>Think of ownership as responsibility for a resource, not as a label attached to a variable forever. A value can move to a new owner. The old variable then stops being a valid route to that value.</MentalModel>
+
+## A move transfers responsibility
+
+```rust
+let original = String::from("hello");
+let new_owner = original;
+
+println!("{new_owner}");
+// println!("{original}"); // rejected: original was moved
+```
+
+Conceptually:
+
+```text
+Before the assignment:
+original ─────► heap bytes "hello"
+
+After the assignment:
+new_owner ────► heap bytes "hello"
+original       ✕ no longer owns the bytes
+```
+
+The string was not necessarily copied. The ownership of its allocation changed hands. This is why a later cleanup can happen exactly once.
+
+## Why integers behave differently
+
+```rust
+let first = 10;
+let second = first;
+println!("{first} and {second}");
+```
+
+Small values such as integers implement `Copy`. Instead of transferring a resource-owning relationship, Rust copies the value. `String` does not implement `Copy` because silently duplicating its heap allocation would be a different and potentially expensive operation.
+
+If you want a real duplicate, say so:
+
+```rust
+let original = String::from("hello");
+let duplicate = original.clone();
+```
+
+<Concept>A move is not a shallow copy bug. It is a deliberate transfer of responsibility. `Clone` is an explicit request to create another value.</Concept>
+
+## The questions to ask before running code
+
+For every value, ask:
+
+1. Where is the value stored?
+2. Which variable owns it right now?
+3. Did an assignment or function call move it?
+4. What happens when the owner leaves scope?
+
+<Predict question="After `let new_owner = original;`, which variable owns the original String allocation?" options={["Both variables", "original", "new_owner"]} answer="new_owner" />
+
+<UnderTheHood>Ownership is a compile-time model, but it describes a runtime responsibility: the owner is the path Rust uses to determine when the value's destructor runs. The exact layout depends on the type.</UnderTheHood>
+
+<Challenge id="ownership-introduction-01" />
+
+<MasteryCheck />

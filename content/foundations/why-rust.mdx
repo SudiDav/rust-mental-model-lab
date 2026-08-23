@@ -1,0 +1,72 @@
+---
+id: why-rust
+title: Why Rust Exists
+world: why-rust
+order: 1
+difficulty: beginner
+estimatedMinutes: 24
+prerequisites:
+  - memory-bugs
+objectives:
+  - Compare manual memory management, garbage collection, and Rust ownership.
+  - Describe the trade-off Rust makes between control, safety, and upfront precision.
+concepts:
+  - memory safety
+  - garbage collection
+  - ownership
+  - deterministic cleanup
+  - zero-cost abstractions
+simulation:
+  type: none
+  scenario: text-first
+status: published
+---
+
+# Why Rust Exists
+
+Rust exists because developers kept wanting two things at the same time:
+
+- the control and predictable performance associated with systems programming;
+- the safety and productivity people expect from higher-level languages.
+
+Those goals are not completely free. Every language chooses where complexity lives: in the programmer, in the runtime, in the compiler, or in the tools around the language.
+
+<Concept>Rust's central trade-off is to move important memory decisions into compile time. The work is more visible while writing the program, so the running program can avoid a tracing garbage collector for ordinary ownership and still reject many invalid memory relationships.</Concept>
+
+## Three useful design points
+
+| Approach | Main convenience | Main responsibility |
+| --- | --- | --- |
+| Manual memory, such as C | Direct control and small runtime | The programmer must keep access and cleanup valid |
+| Managed memory, such as C# or TypeScript | The runtime handles ordinary object reclamation | The runtime decides when memory is reclaimed, and external resources need separate patterns |
+| Ownership, such as Rust | The compiler checks relationships and cleanup is deterministic | The programmer must express who owns, borrows, and mutates data |
+
+None of these choices makes a language “better” for every task. TypeScript is often ergonomic for web application iteration. C# is powerful for large managed applications. C is useful when direct control is the priority. Rust is compelling when control and strong safety need to coexist.
+
+## The cost of hiding less
+
+```rust
+let message = String::from("hello");
+let alias = &message;
+println!("{alias}");
+```
+
+Rust asks you to notice that `message` owns the string, `alias` borrows it, and the borrow must remain valid. That can feel like extra ceremony when you are used to managed references.
+
+The payoff is that the compiler can reason about the relationship before execution. When you later see an ownership error, it is not an arbitrary obstacle: it is evidence that the code's model is incomplete or contradictory.
+
+<MentalModel>Rust is a negotiation with the compiler: explain the ownership and access relationships clearly enough, and Rust gives you control without asking the runtime to guess what you meant.</MentalModel>
+
+## A fair comparison with TypeScript and C#
+
+TypeScript and C# are not “unsafe versions of Rust.” They are designed around different defaults. Their runtimes make many everyday application tasks feel natural. Rust exposes more of the memory contract so that the compiler can check it and the generated program can stay close to the machine.
+
+The useful question is not “Which language wins?” It is “Which responsibility boundary fits this problem and this team?”
+
+<Predict question="Where does Rust place more of the memory-safety work?" options={["Only in a garbage collector", "In compile-time ownership and borrowing checks", "In a hidden background thread"]} answer="In compile-time ownership and borrowing checks" />
+
+<UnderTheHood>“Zero-cost abstraction” means an abstraction should not impose a runtime cost merely because it is expressed at a higher level. It does not mean every Rust program is automatically fast or that design choices are free.</UnderTheHood>
+
+<Challenge id="why-rust-01" />
+
+<MasteryCheck />
