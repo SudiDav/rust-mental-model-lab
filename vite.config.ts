@@ -8,6 +8,7 @@ export default defineConfig({
   base: '/rust-mental-model-lab/',
   plugins: [
     mdx({
+      providerImportSource: '@mdx-js/react',
       remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
     }),
     react(),
