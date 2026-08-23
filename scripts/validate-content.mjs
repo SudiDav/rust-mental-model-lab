@@ -3,7 +3,7 @@ import path from 'node:path';
 import matter from 'gray-matter';
 
 const root = path.resolve('content');
-const expectedPublished = new Set(['bits-and-bytes', 'cpu-and-memory', 'program-memory', 'stack-and-heap']);
+const expectedPublished = new Set(['start-here', 'bits-and-bytes', 'cpu-and-memory', 'program-memory', 'stack-and-heap']);
 const plannedIds = new Set([
   'pointers-references', 'memory-bugs', 'why-rust', 'ownership-introduction', 'borrowing-introduction',
   'mutable-borrowing', 'borrow-checker', 'lifetimes-introduction', 'slices', 'smart-pointers',
@@ -14,7 +14,7 @@ const worldIds = new Set([
   'why-rust', 'ownership', 'borrowing', 'mutable-borrowing', 'borrow-checker', 'lifetimes', 'slices',
   'smart-pointers', 'reference-counting', 'concurrency', 'async-rust', 'unsafe-rust',
 ]);
-const registeredSimulations = new Set(['binary', 'memory-hierarchy', 'process-memory', 'stack-heap']);
+const registeredSimulations = new Set(['none', 'binary', 'memory-hierarchy', 'process-memory', 'stack-heap']);
 
 async function walk(directory) {
   const entries = await readdir(directory, { withFileTypes: true });

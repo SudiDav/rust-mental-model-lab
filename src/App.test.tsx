@@ -11,8 +11,18 @@ describe('application shell', () => {
     window.location.hash = '#/';
     render(<App />);
     expect(screen.getByRole('heading', { name: /rust mental model lab/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /why this lab exists/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /start with the why/i })).toBeInTheDocument();
     expect(screen.getByText(/World 17/i)).toBeInTheDocument();
     expect(screen.getAllByText(/planned/i).length).toBeGreaterThan(0);
+  });
+
+  it('renders the human introduction before the first-principles lesson', () => {
+    window.location.hash = '#/lesson/start-here';
+    render(<App />);
+    expect(screen.getByRole('heading', { name: /why build a mental model/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /rust compared with typescript and c#/i })).toBeInTheDocument();
+    expect(screen.getByText(/compiler checks ownership, borrowing, and lifetimes/i)).toBeInTheDocument();
   });
 
   it('renders an MDX lesson and its simulation workspace', () => {

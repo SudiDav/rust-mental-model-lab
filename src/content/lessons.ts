@@ -2,6 +2,12 @@ import type { LessonRecord } from './types';
 
 const publishedLessons: LessonRecord[] = [
   {
+    id: 'start-here', slug: 'start-here', title: 'Why Build a Mental Model?', world: 'foundations', order: 0,
+    difficulty: 'beginner', estimatedMinutes: 12, prerequisites: [],
+    objectives: ['Understand why memory and execution models make Rust easier to reason about.', 'Compare the ergonomics and trade-offs of Rust, C#, and TypeScript.', 'Adopt an observe-predict-explain loop for the lessons ahead.'],
+    concepts: ['mental model', 'language ergonomics', 'garbage collection', 'ownership', 'borrowing'], simulation: { type: 'none', scenario: 'orientation' }, status: 'published',
+  },
+  {
     id: 'bits-and-bytes', slug: 'bits-and-bytes', title: 'Bits and Bytes', world: 'foundations', order: 1,
     difficulty: 'beginner', estimatedMinutes: 15, prerequisites: [],
     objectives: ['Toggle bits and translate the same pattern into multiple representations.'],

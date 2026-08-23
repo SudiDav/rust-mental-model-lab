@@ -32,7 +32,9 @@ describe('curriculum loader', () => {
 
   it('exposes published lessons before planned lessons', () => {
     const lessons = getLessons();
-    expect(lessons.filter((lesson) => lesson.status === 'published')).toHaveLength(4);
+    expect(lessons.filter((lesson) => lesson.status === 'published')).toHaveLength(5);
+    expect(lessons[0].id).toBe('start-here');
+    expect(lessons[0].prerequisites).toEqual([]);
     expect(lessons.some((lesson) => lesson.status === 'planned')).toBe(true);
     expect(lessons.find((lesson) => lesson.id === 'ownership-introduction')?.status).toBe('planned');
   });

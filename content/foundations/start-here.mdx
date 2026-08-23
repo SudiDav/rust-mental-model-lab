@@ -1,0 +1,110 @@
+---
+id: start-here
+title: Why Build a Mental Model?
+world: foundations
+order: 0
+difficulty: beginner
+estimatedMinutes: 12
+prerequisites: []
+objectives:
+  - Understand why memory and execution models make Rust easier to reason about.
+  - Compare the ergonomics and trade-offs of Rust, C#, and TypeScript.
+  - Adopt an observe-predict-explain loop for the lessons ahead.
+concepts:
+  - mental model
+  - language ergonomics
+  - garbage collection
+  - ownership
+  - borrowing
+simulation:
+  type: none
+  scenario: orientation
+status: published
+---
+
+# Why Build a Mental Model?
+
+Welcome. This is not a course that begins by throwing Rust syntax at you and asking you to remember a list of rules. It is a place to build a reliable picture of what a program is doing so that Rust's rules become understandable consequences of that picture.
+
+If you are a student, this gives the ideas somewhere to land. If you already work in TypeScript, C#, Java, Python, or another high-level language, this gives you a bridge from familiar programming ergonomics to systems-level reasoning.
+
+<Concept>A mental model is a small, useful explanation of what is happening underneath the code. It does not need to include every hardware detail. It needs to be accurate enough that you can predict what the program will do next.</Concept>
+
+## Why does Rust ask me to care about memory?
+
+Every program stores information, moves it, shares it, changes it, and eventually stops needing it. Languages make different choices about how much of that story you must see.
+
+In a language with a managed runtime, you can often focus on the behavior of your application while the runtime tracks objects and reclaims memory later. That is a productive and valuable trade-off. In a language like C, you get direct control and a small runtime, but you also carry more responsibility for allocation, cleanup, and valid access.
+
+Rust is designed around a different balance: keep control over representation, performance, and cleanup while using the compiler to check the relationships that commonly cause memory bugs.
+
+<MentalModel>Rust is not trying to make memory disappear. It is trying to make the memory story explicit, checkable, and predictable without requiring a garbage collector for ordinary ownership.</MentalModel>
+
+## Rust compared with TypeScript and C#
+
+The point is not that one language is universally better. Each language is ergonomic for a different set of priorities. Here, ergonomics means how naturally a language helps you express your intent and how much machinery it asks you to understand to do so safely.
+
+| Language | What feels easy at first | What the runtime or compiler handles | What you learn to reason about |
+| --- | --- | --- | --- |
+| TypeScript | Building application behavior quickly with objects and references | The JavaScript runtime and garbage collector manage object memory | Types, module boundaries, async behavior, and runtime limits |
+| C# | Expressing rich application and domain code with a large standard library | The .NET runtime and garbage collector manage most object memory | Types, allocations, async behavior, and explicit resource patterns such as `using` |
+| Rust | Writing code with direct control and strong compile-time guarantees | The compiler checks ownership, borrowing, and lifetimes; values are cleaned up deterministically | Where data lives, who owns it, who may access it, and how long it is valid |
+
+The difference becomes clearer with a simple question: what happens when a value is passed to another part of the program?
+
+### TypeScript: references are convenient
+
+```typescript
+const profile = { name: "Sudi" };
+sendToLogger(profile);
+console.log(profile.name);
+```
+
+The object can be referenced by more than one part of the program. The JavaScript runtime keeps it alive while it remains reachable and eventually reclaims it when it is no longer reachable. That is convenient, but the memory lifetime is not usually the main thing your code has to express.
+
+### C#: managed memory with explicit resource escape hatches
+
+```csharp
+var profile = new Profile("Sudi");
+SendToLogger(profile);
+Console.WriteLine(profile.Name);
+```
+
+The .NET garbage collector manages the memory for ordinary objects. When you work with external resources such as files or sockets, C# gives you explicit patterns such as `using` and `IDisposable`, because not every resource is just managed memory.
+
+### Rust: access is part of the program's contract
+
+```rust
+let profile = String::from("Sudi");
+send_to_logger(&profile);
+println!("{profile}");
+```
+
+Here, `profile` owns its string data and the function receives a temporary shared borrow. The compiler checks that the borrowed access does not outlive the owner and that no conflicting mutation happens at the same time. When `profile` leaves scope, Rust can clean it up deterministically.
+
+<UnderTheHood>These examples are intentionally small. TypeScript and C# can also express stricter designs, and Rust can use shared ownership or explicit resource abstractions when those are the right tools. The comparison is about default ergonomics and responsibility boundaries, not language stereotypes.</UnderTheHood>
+
+## What Rust gives back
+
+Rust asks for more precision up front. You will encounter moves, borrowing, lifetimes, and compiler messages that feel unusually specific. That is the cost of making relationships visible before runtime.
+
+In return, you get a compiler that can reject many classes of use-after-free, dangling-reference, double-free, and data-race bugs before the program runs. You can also make decisions about layout, allocation, and cleanup without handing ordinary memory management to a tracing garbage collector.
+
+<Concept>Rust's learning curve is not evidence that the language is unfriendly. It is evidence that the language exposes decisions other languages often keep behind a runtime boundary. The lab exists to make those decisions understandable.</Concept>
+
+## How to use this lab
+
+For each world, follow the same loop:
+
+1. Observe the model and name the objects involved.
+2. Predict what the next action will do.
+3. Run the interaction and compare it with your prediction.
+4. Explain the result in your own words.
+
+The first-principles path starts with bits and bytes, then moves through CPU and memory, processes, stack and heap, pointers, memory bugs, and finally Rust's ownership model. We are building the world that makes the Rust rules feel inevitable.
+
+<Predict question="What is the main purpose of this lab's mental model?" options={["To memorize Rust syntax", "To predict what the computer and compiler are doing", "To avoid learning other languages"]} answer="To predict what the computer and compiler are doing" />
+
+<Challenge id="start-here-01" />
+
+<MasteryCheck />
