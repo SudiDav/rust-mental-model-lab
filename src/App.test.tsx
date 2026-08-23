@@ -1,6 +1,13 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import App from './App';
+
+beforeEach(() => {
+  window.location.hash = '';
+  window.localStorage.clear();
+  delete document.documentElement.dataset.theme;
+  delete document.documentElement.dataset.themeMode;
+});
 
 afterEach(() => {
   window.location.hash = '';
