@@ -17,7 +17,7 @@ describe('lesson prerequisites', () => {
 
   it('unlocks a lesson after all prerequisites are completed', () => {
     const result = isLessonUnlocked(lesson('cpu-and-memory', ['bits-and-bytes']), {
-      lessons: { 'bits-and-bytes': { status: 'completed', quizScore: 1, completedChallenges: [], reviewConcepts: [] } },
+      lessons: { 'bits-and-bytes': { status: 'completed', quizScore: 1, completedChallenges: [], completedExercises: [], reviewConcepts: [] } },
     });
     expect(result).toEqual({ unlocked: true, missing: [], explanation: '' });
   });

@@ -17,7 +17,7 @@ describe('progress persistence', () => {
   it('saves and loads lesson completion state', () => {
     const storage = new MemoryStorage();
     const progress = loadProgress(storage);
-    progress.lessons['bits-and-bytes'] = { status: 'completed', quizScore: 1, completedChallenges: [], reviewConcepts: [] };
+    progress.lessons['bits-and-bytes'] = { status: 'completed', quizScore: 1, completedChallenges: [], completedExercises: [], reviewConcepts: [] };
     saveProgress(storage, progress);
     expect(loadProgress(storage).lessons['bits-and-bytes'].status).toBe('completed');
   });

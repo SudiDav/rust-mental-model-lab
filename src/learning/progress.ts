@@ -8,6 +8,7 @@ export interface LessonProgress {
   status: LessonProgressStatus;
   quizScore: number | null;
   completedChallenges: string[];
+  completedExercises: string[];
   reviewConcepts: string[];
 }
 
@@ -28,6 +29,7 @@ function normalizeLessonProgress(value: unknown): LessonProgress {
     status,
     quizScore: typeof candidate.quizScore === 'number' ? candidate.quizScore : null,
     completedChallenges: Array.isArray(candidate.completedChallenges) ? candidate.completedChallenges.filter((id): id is string => typeof id === 'string') : [],
+    completedExercises: Array.isArray(candidate.completedExercises) ? candidate.completedExercises.filter((id): id is string => typeof id === 'string') : [],
     reviewConcepts: Array.isArray(candidate.reviewConcepts) ? candidate.reviewConcepts.filter((concept): concept is string => typeof concept === 'string') : [],
   };
 }
@@ -40,7 +42,7 @@ export function migrateProgress(input: unknown): ProgressState {
     for (const [id, value] of Object.entries(candidate.lessons)) lessons[id] = normalizeLessonProgress(value);
   } else if (Array.isArray(candidate.completed)) {
     for (const id of candidate.completed.filter((value): value is string => typeof value === 'string')) {
-      lessons[id] = { status: 'completed', quizScore: null, completedChallenges: [], reviewConcepts: [] };
+      lessons[id] = { status: 'completed', quizScore: null, completedChallenges: [], completedExercises: [], reviewConcepts: [] };
     }
   }
   return { schemaVersion: CURRENT_PROGRESS_SCHEMA, lessons, lastUpdated: typeof (candidate as { lastUpdated?: unknown }).lastUpdated === 'string' ? (candidate as { lastUpdated: string }).lastUpdated : new Date().toISOString() };

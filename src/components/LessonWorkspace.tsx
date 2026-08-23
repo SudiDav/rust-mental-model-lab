@@ -7,7 +7,7 @@ import { LockedLesson } from './LockedLesson';
 import { SimulationPanel } from './SimulationPanel';
 import { LessonMDXProvider } from './mdx/MDXProvider';
 
-export function LessonWorkspace({ lesson, onBack }: { lesson: LessonRecord; onBack: () => void }) {
+export function LessonWorkspace({ lesson, nextLesson, onBack, onLessonComplete }: { lesson: LessonRecord; nextLesson?: LessonRecord; onBack: () => void; onLessonComplete: () => void }) {
   const { progress, markLearning } = useLearning();
   const unlocked = isLessonUnlocked(lesson, progress);
   const Content = lesson.component;
@@ -17,7 +17,7 @@ export function LessonWorkspace({ lesson, onBack }: { lesson: LessonRecord; onBa
     <div className="mt-7 grid gap-8 xl:grid-cols-[minmax(0,1fr)_minmax(360px,0.72fr)]">
       <article className="lesson-enter min-w-0 rounded-2xl border border-line bg-panel/60 p-6 md:p-10">
         <div className="flex flex-wrap items-center gap-3 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500"><span>{lesson.world}</span><span>·</span><span>{lesson.estimatedMinutes} min</span><span>·</span><span>{lesson.difficulty}</span></div>
-        {!unlocked.unlocked ? <LockedLesson explanation={unlocked.explanation} /> : Content ? <LessonMDXProvider lessonId={lesson.id}><Content /></LessonMDXProvider> : <p className="mt-6 text-slate-400">This lesson is being prepared.</p>}
+        {!unlocked.unlocked ? <LockedLesson explanation={unlocked.explanation} /> : Content ? <LessonMDXProvider lessonId={lesson.id} nextLessonTitle={nextLesson?.title} onComplete={onLessonComplete}><Content /></LessonMDXProvider> : <p className="mt-6 text-slate-400">This lesson is being prepared.</p>}
       </article>
       <aside className="space-y-5 xl:sticky xl:top-6 xl:self-start">
         <SimulationPanel type={lesson.simulation.type} scenario={lesson.simulation.scenario} />

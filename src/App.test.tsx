@@ -1,9 +1,10 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import App from './App';
 
 afterEach(() => {
   window.location.hash = '';
+  window.localStorage.clear();
 });
 
 describe('application shell', () => {
@@ -35,5 +36,29 @@ describe('application shell', () => {
     expect(screen.getByRole('heading', { name: 'Bits and Bytes' })).toBeInTheDocument();
     expect(screen.getByText(/same eight bits/i)).toBeInTheDocument();
     expect(screen.getAllByRole('region', { name: /binary playground/i }).length).toBeGreaterThan(0);
+  });
+
+  it('keeps the learner on the lesson until its exercises are passed', async () => {
+    window.location.hash = '#/lesson/start-here';
+    render(<App />);
+
+    fireEvent.click(screen.getByRole('button', { name: /to memorize rust syntax/i }));
+    fireEvent.click(screen.getByRole('button', { name: /mark challenge complete/i }));
+    fireEvent.click(screen.getByRole('button', { name: /complete lesson/i }));
+
+    expect(window.location.hash).toBe('#/lesson/start-here');
+    expect(screen.getByText(/complete the remaining exercises before continuing/i)).toBeInTheDocument();
+  });
+
+  it('opens the next published lesson after all exercises are passed', async () => {
+    window.location.hash = '#/lesson/start-here';
+    render(<App />);
+
+    fireEvent.click(screen.getByRole('button', { name: /to predict what the computer and compiler are doing/i }));
+    fireEvent.click(screen.getByRole('button', { name: /mark challenge complete/i }));
+    fireEvent.click(screen.getByRole('button', { name: /complete lesson/i }));
+
+    await waitFor(() => expect(window.location.hash).toBe('#/lesson/bits-and-bytes'));
+    expect(screen.getByRole('heading', { name: 'Bits and Bytes' })).toBeInTheDocument();
   });
 });

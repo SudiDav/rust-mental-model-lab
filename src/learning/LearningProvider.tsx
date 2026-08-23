@@ -6,6 +6,7 @@ interface LearningContextValue {
   markLearning: (lessonId: string) => void;
   completeLesson: (lessonId: string, quizScore?: number) => void;
   recordQuizScore: (lessonId: string, quizScore: number) => void;
+  completeExercise: (lessonId: string, exerciseId: string) => void;
   toggleReviewConcept: (lessonId: string, concept: string) => void;
   completeChallenge: (lessonId: string, challengeId: string) => void;
   resetProgress: () => void;
@@ -28,7 +29,7 @@ export function LearningProvider({ children }: PropsWithChildren) {
   const updateLesson = useCallback((lessonId: string, updater: (current: ProgressState['lessons'][string]) => ProgressState['lessons'][string]) => {
     setProgress((current) => ({
       ...current,
-      lessons: { ...current.lessons, [lessonId]: updater(current.lessons[lessonId] ?? { status: 'not-started', quizScore: null, completedChallenges: [], reviewConcepts: [] }) },
+      lessons: { ...current.lessons, [lessonId]: updater(current.lessons[lessonId] ?? { status: 'not-started', quizScore: null, completedChallenges: [], completedExercises: [], reviewConcepts: [] }) },
     }));
   }, []);
 
@@ -37,8 +38,13 @@ export function LearningProvider({ children }: PropsWithChildren) {
     markLearning: (lessonId) => updateLesson(lessonId, (lesson) => ({ ...lesson, status: lesson.status === 'completed' ? 'completed' : 'learning' })),
     completeLesson: (lessonId, quizScore) => updateLesson(lessonId, (lesson) => ({ ...lesson, status: 'completed', quizScore: quizScore ?? lesson.quizScore })),
     recordQuizScore: (lessonId, quizScore) => updateLesson(lessonId, (lesson) => ({ ...lesson, quizScore })),
+    completeExercise: (lessonId, exerciseId) => updateLesson(lessonId, (lesson) => ({ ...lesson, completedExercises: lesson.completedExercises.includes(exerciseId) ? lesson.completedExercises : [...lesson.completedExercises, exerciseId] })),
     toggleReviewConcept: (lessonId, concept) => updateLesson(lessonId, (lesson) => ({ ...lesson, reviewConcepts: lesson.reviewConcepts.includes(concept) ? lesson.reviewConcepts.filter((item) => item !== concept) : [...lesson.reviewConcepts, concept] })),
-    completeChallenge: (lessonId, challengeId) => updateLesson(lessonId, (lesson) => ({ ...lesson, completedChallenges: lesson.completedChallenges.includes(challengeId) ? lesson.completedChallenges : [...lesson.completedChallenges, challengeId] })),
+    completeChallenge: (lessonId, challengeId) => updateLesson(lessonId, (lesson) => ({
+      ...lesson,
+      completedChallenges: lesson.completedChallenges.includes(challengeId) ? lesson.completedChallenges : [...lesson.completedChallenges, challengeId],
+      completedExercises: lesson.completedExercises.includes(`challenge:${challengeId}`) ? lesson.completedExercises : [...lesson.completedExercises, `challenge:${challengeId}`],
+    })),
     resetProgress: () => setProgress(loadProgress({ getItem: () => null, setItem: () => undefined })),
   }), [progress, updateLesson]);
 
