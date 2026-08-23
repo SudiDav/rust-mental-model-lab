@@ -14,6 +14,8 @@ describe('application shell', () => {
     expect(screen.getByRole('heading', { name: /rust mental model lab/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /why this lab exists/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /start with the why/i })).toBeInTheDocument();
+    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+    expect(screen.getByText(/first principles → ownership → confidence/i)).toBeInTheDocument();
     expect(screen.getByText(/World 17/i)).toBeInTheDocument();
     expect(screen.getAllByText(/planned/i).length).toBeGreaterThan(0);
   });
