@@ -5,6 +5,8 @@ import App from './App';
 afterEach(() => {
   window.location.hash = '';
   window.localStorage.clear();
+  delete document.documentElement.dataset.theme;
+  delete document.documentElement.dataset.themeMode;
 });
 
 describe('application shell', () => {
@@ -62,5 +64,21 @@ describe('application shell', () => {
 
     await waitFor(() => expect(window.location.hash).toBe('#/lesson/bits-and-bytes'));
     expect(screen.getByRole('heading', { name: 'Bits and Bytes' })).toBeInTheDocument();
+  });
+
+  it('persists the selected theme from the navigation menu', () => {
+    window.location.hash = '#/';
+    render(<App />);
+
+    fireEvent.click(screen.getByRole('button', { name: /theme: system/i }));
+    expect(screen.getByRole('menuitemradio', { name: 'Dark' })).toBeInTheDocument();
+    expect(screen.getByRole('menuitemradio', { name: 'Light' })).toBeInTheDocument();
+    expect(screen.getByRole('menuitemradio', { name: 'System' })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('menuitemradio', { name: 'Light' }));
+
+    expect(window.localStorage.getItem('rust-lab-theme')).toBe('light');
+    expect(document.documentElement.dataset.theme).toBe('light');
+    expect(screen.getByRole('button', { name: /theme: light/i })).toBeInTheDocument();
   });
 });

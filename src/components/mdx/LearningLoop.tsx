@@ -7,7 +7,7 @@ const STEPS = [
 
 export function LearningLoop() {
   return (
-    <section role="region" aria-label="learning loop animation" className="my-8 rounded-2xl border border-cyan-300/15 bg-[#0b1017] p-5">
+    <section role="region" aria-label="learning loop animation" className="my-8 rounded-2xl border border-cyan-300/15 bg-panel p-5">
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-cyan-300">The learning loop</p>

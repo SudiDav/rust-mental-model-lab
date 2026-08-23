@@ -6,6 +6,20 @@
     <meta name="theme-color" content="#0b0d12" />
     <meta name="description" content="An interactive Rust memory and ownership learning laboratory." />
     <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <script>
+      (() => {
+        try {
+          const stored = localStorage.getItem('rust-lab-theme');
+          const mode = stored === 'dark' || stored === 'light' || stored === 'system' ? stored : 'system';
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.dataset.themeMode = mode;
+          document.documentElement.dataset.theme = mode === 'dark' || (mode === 'system' && prefersDark) ? 'dark' : 'light';
+        } catch {
+          document.documentElement.dataset.themeMode = 'system';
+          document.documentElement.dataset.theme = 'dark';
+        }
+      })();
+    </script>
     <title>Rust Mental Model Lab</title>
   </head>
   <body>

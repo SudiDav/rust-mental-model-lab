@@ -1,5 +1,6 @@
 import { routeTo } from '../app/routes';
 import { BrandMark } from './BrandMark';
+import { ThemeMenu } from './ThemeMenu';
 
 export function TopBar() {
   return (
@@ -12,9 +13,12 @@ export function TopBar() {
             <span className="mt-1 block text-sm font-medium text-slate-200">See the machine. Predict the compiler.</span>
           </span>
         </a>
-        <div className="hidden items-center gap-3 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500 sm:flex">
-          <span className="rounded-full border border-emerald-300/20 bg-emerald-300/5 px-3 py-1 text-emerald-300">static lab</span>
-          <span>local progress</span>
+        <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">
+          <div className="hidden items-center gap-3 sm:flex">
+            <span className="rounded-full border border-emerald-300/20 bg-emerald-300/5 px-3 py-1 text-emerald-300">static lab</span>
+            <span>local progress</span>
+          </div>
+          <ThemeMenu />
         </div>
       </div>
     </header>
