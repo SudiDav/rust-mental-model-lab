@@ -1,0 +1,38 @@
+---
+id: cpu-and-memory
+title: CPU and Memory
+world: cpu-memory
+order: 1
+difficulty: beginner
+estimatedMinutes: 15
+prerequisites:
+  - bits-and-bytes
+objectives:
+  - Compare the conceptual roles of registers, cache, RAM, and storage.
+concepts:
+  - CPU
+  - registers
+  - cache
+  - RAM
+  - storage
+simulation:
+  type: memory-hierarchy
+  scenario: latency
+status: published
+---
+
+# CPU and Memory
+
+The CPU works with data through a hierarchy of increasingly large and increasingly distant storage layers.
+
+<Concept>Registers are closest to the CPU. Cache, RAM, and storage trade speed for capacity and persistence.</Concept>
+
+<MentalModel>Imagine a workbench, a nearby shelf, a room, and a warehouse. The farther away the item, the more work it takes to fetch.</MentalModel>
+
+<Simulation type="memory-hierarchy" scenario="latency" />
+
+<UnderTheHood>The exact timing depends on hardware. This simulation shows relative access cost, not universal nanosecond values.</UnderTheHood>
+
+<Challenge id="cpu-and-memory-01" />
+
+<MasteryCheck />

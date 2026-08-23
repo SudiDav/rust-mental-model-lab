@@ -1,0 +1,39 @@
+---
+id: bits-and-bytes
+title: Bits and Bytes
+world: foundations
+order: 1
+difficulty: beginner
+estimatedMinutes: 15
+prerequisites: []
+objectives:
+  - Toggle bits and translate the same pattern into multiple representations.
+concepts:
+  - bits
+  - bytes
+  - binary
+  - ASCII
+  - hexadecimal
+simulation:
+  type: binary
+  scenario: basic
+status: published
+---
+
+# Bits and Bytes
+
+Computers store patterns of bits. The pattern does not carry a single built-in meaning; a program decides whether to interpret it as a number, a character, or something else.
+
+<Concept>One byte is eight bits. The same eight bits can be interpreted in different ways.</Concept>
+
+<MentalModel>Think of a byte as eight tiny switches. The switches are the data; the interpretation is the lens you choose.</MentalModel>
+
+<Simulation type="binary" scenario="basic" />
+
+<Predict question="What changes when you reinterpret the same bits as hexadecimal?" options={["The bits change", "Only the written representation changes", "The computer creates a new byte"]} answer="Only the written representation changes" />
+
+<UnderTheHood>Binary, decimal, hexadecimal, and ASCII are different views over the same bit pattern.</UnderTheHood>
+
+<Challenge id="bits-and-bytes-01" />
+
+<MasteryCheck />

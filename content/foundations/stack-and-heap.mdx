@@ -1,0 +1,38 @@
+---
+id: stack-and-heap
+title: Stack and Heap
+world: stack-heap
+order: 1
+difficulty: beginner
+estimatedMinutes: 25
+prerequisites:
+  - program-memory
+objectives:
+  - Follow a stack value through a pointer to bytes in a conceptual heap allocation.
+concepts:
+  - allocation
+  - pointer
+  - length
+  - capacity
+  - scope
+simulation:
+  type: stack-heap
+  scenario: string-allocation
+status: published
+---
+
+# Stack and Heap
+
+A `String` value can keep a small descriptor on the stack while its variable-sized bytes live in a heap allocation.
+
+<Concept>The stack stores function-local frames. The heap stores dynamic allocations whose size or lifetime needs more flexibility.</Concept>
+
+<MentalModel>Follow the pointer: variable → pointer → address → bytes.</MentalModel>
+
+<Simulation type="stack-heap" scenario="string-allocation" />
+
+<UnderTheHood>The pointer, length, and capacity shown here are a conceptual view of a Rust `String` representation.</UnderTheHood>
+
+<Challenge id="stack-and-heap-01" />
+
+<MasteryCheck />

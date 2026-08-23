@@ -1,0 +1,38 @@
+---
+id: program-memory
+title: Program Memory
+world: program-memory
+order: 1
+difficulty: beginner
+estimatedMinutes: 20
+prerequisites:
+  - cpu-and-memory
+objectives:
+  - Locate code, static data, stack frames, and heap allocations in a process model.
+concepts:
+  - process
+  - address space
+  - stack
+  - heap
+  - stack frame
+simulation:
+  type: process-memory
+  scenario: address-space
+status: published
+---
+
+# Program Memory
+
+A running program gets a conceptual address space containing code, static data, stack frames, and heap allocations.
+
+<Concept>A process is an executing program with its own view of memory.</Concept>
+
+<MentalModel>Picture a tall building: code and global data have fixed rooms, the stack grows through function workspaces, and the heap holds dynamic allocations.</MentalModel>
+
+<Simulation type="process-memory" scenario="address-space" />
+
+<UnderTheHood>The layout is a teaching model. Operating systems and compilers may arrange details differently.</UnderTheHood>
+
+<Challenge id="program-memory-01" />
+
+<MasteryCheck />
