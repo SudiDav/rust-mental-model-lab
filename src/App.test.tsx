@@ -25,6 +25,8 @@ describe('application shell', () => {
     expect(screen.getByText(/compiler checks ownership, borrowing, and lifetimes/i)).toBeInTheDocument();
     expect(screen.getByRole('region', { name: /text-first lesson/i })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: /learning loop animation/i })).toBeInTheDocument();
+    expect(screen.getByText('typescript')).toBeInTheDocument();
+    expect(screen.getByText('csharp')).toBeInTheDocument();
   });
 
   it('renders an MDX lesson and its simulation workspace', () => {
