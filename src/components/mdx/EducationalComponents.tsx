@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { useLearning } from '../../learning/LearningProvider';
+import { Celebration, playSuccessChime } from '../Celebration';
 import { PredictionCard } from '../PredictionCard';
 import { SimulationPanel } from '../SimulationPanel';
 import { useLessonExercise, useLessonExercises } from './LessonExerciseContext';
@@ -26,15 +27,18 @@ export function MasteryCheck({ lessonId, nextLessonTitle, onComplete }: { lesson
   const { completeLesson } = useLearning();
   const { isComplete, missingExerciseIds } = useLessonExercises();
   const [message, setMessage] = useState('');
+  const [celebrating, setCelebrating] = useState(false);
   const handleComplete = () => {
     if (!lessonId) return;
+    if (celebrating) return;
     if (!isComplete) {
       setMessage(`Complete the remaining exercises before continuing (${missingExerciseIds.length} left).`);
       return;
     }
-    completeLesson(lessonId);
+    playSuccessChime();
+    setCelebrating(true);
     setMessage(nextLessonTitle ? `Lesson complete. Opening ${nextLessonTitle} next.` : 'Lesson complete. You have finished the published learning path.');
-    onComplete?.();
   };
-  return <section className="my-8 rounded-2xl border border-emerald-300/20 bg-emerald-300/[0.04] p-5"><p className="font-mono text-[10px] uppercase tracking-[0.18em] text-emerald-300">Mastery check</p><p className="mt-2 text-sm leading-6 text-slate-300">Can you predict the next state before pressing the control?</p><button onClick={handleComplete} className="mt-4 rounded-lg border border-emerald-300/30 px-3 py-2 font-mono text-xs text-emerald-200">Complete lesson</button>{message && <p role="status" className="mt-3 text-sm text-amber-200">{message}</p>}</section>;
+  const finishCelebration = () => { if (!lessonId) return; completeLesson(lessonId); onComplete?.(); };
+  return <section className="relative my-8 overflow-hidden rounded-2xl border border-emerald-300/20 bg-emerald-300/[0.04] p-5"><p className="font-mono text-[10px] uppercase tracking-[0.18em] text-emerald-300">Mastery check</p><p className="mt-2 text-sm leading-6 text-slate-300">Can you predict the next state before pressing the control?</p>{celebrating && <Celebration onFinished={finishCelebration} />}<button disabled={celebrating} onClick={handleComplete} className="mt-4 rounded-lg border border-emerald-300/30 px-3 py-2 font-mono text-xs text-emerald-200 disabled:cursor-wait disabled:opacity-60">{celebrating ? 'Celebrating…' : 'Complete lesson'}</button>{message && <p role="status" className="mt-3 text-sm text-amber-200">{message}</p>}</section>;
 }

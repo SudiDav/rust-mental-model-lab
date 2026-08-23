@@ -3,6 +3,7 @@ import { useLearning } from '../../learning/LearningProvider';
 
 interface LessonExerciseContextValue {
   registerExercise: (exerciseId: string) => void;
+  ready: boolean;
   isComplete: boolean;
   missingExerciseIds: string[];
 }
@@ -19,14 +20,14 @@ export function LessonExerciseProvider({ lessonId, children }: PropsWithChildren
   useEffect(() => { setReady(true); }, []);
   const completedExerciseIds = progress.lessons[lessonId]?.completedExercises ?? [];
   const missingExerciseIds = requiredExerciseIds.filter((exerciseId) => !completedExerciseIds.includes(exerciseId));
-  const value = useMemo(() => ({ registerExercise, isComplete: ready && missingExerciseIds.length === 0, missingExerciseIds }), [missingExerciseIds, ready, registerExercise]);
+  const value = useMemo(() => ({ registerExercise, ready, isComplete: ready && missingExerciseIds.length === 0, missingExerciseIds }), [missingExerciseIds, ready, registerExercise]);
   return <LessonExerciseContext.Provider value={value}>{children}</LessonExerciseContext.Provider>;
 }
 
 export function useLessonExercise(exerciseId: string): boolean {
-  const { registerExercise, missingExerciseIds } = useLessonExercises();
+  const { registerExercise, ready, missingExerciseIds } = useLessonExercises();
   useEffect(() => { registerExercise(exerciseId); }, [registerExercise, exerciseId]);
-  return !missingExerciseIds.includes(exerciseId);
+  return ready && !missingExerciseIds.includes(exerciseId);
 }
 
 export function useLessonExercises(): LessonExerciseContextValue {

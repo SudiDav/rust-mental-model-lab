@@ -52,6 +52,7 @@ describe('application shell', () => {
 
     expect(window.location.hash).toBe('#/lesson/start-here');
     expect(screen.getByText(/complete the remaining exercises before continuing/i)).toBeInTheDocument();
+    expect(screen.queryByText(/challenge complete/i)).not.toBeInTheDocument();
   });
 
   it('opens the next published lesson after all exercises are passed', async () => {
@@ -62,8 +63,19 @@ describe('application shell', () => {
     fireEvent.click(screen.getByRole('button', { name: /mark challenge complete/i }));
     fireEvent.click(screen.getByRole('button', { name: /complete lesson/i }));
 
-    await waitFor(() => expect(window.location.hash).toBe('#/lesson/bits-and-bytes'));
+    await waitFor(() => expect(window.location.hash).toBe('#/lesson/bits-and-bytes'), { timeout: 2000 });
     expect(screen.getByRole('heading', { name: 'Bits and Bytes' })).toBeInTheDocument();
+  });
+
+  it('celebrates after the learner passes every exercise', () => {
+    window.location.hash = '#/lesson/start-here';
+    render(<App />);
+
+    fireEvent.click(screen.getByRole('button', { name: /to predict what the computer and compiler are doing/i }));
+    fireEvent.click(screen.getByRole('button', { name: /mark challenge complete/i }));
+    fireEvent.click(screen.getByRole('button', { name: /complete lesson/i }));
+
+    expect(screen.getByText(/challenge complete/i)).toBeInTheDocument();
   });
 
   it('persists the selected theme from the navigation menu', () => {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getRoute, routeTo } from './app/routes';
 import { getLessons, getWorlds } from './content/loader';
 import { LearningProvider, useLearning } from './learning/LearningProvider';
@@ -11,8 +11,8 @@ function LabApp() {
   const lessons = useMemo(getLessons, []);
   const { progress } = useLearning();
   useEffect(() => { const onHashChange = () => setRoute(getRoute()); window.addEventListener('hashchange', onHashChange); return () => window.removeEventListener('hashchange', onHashChange); }, []);
-  const openLesson = (id: string) => { window.location.hash = routeTo('lesson', id); };
-  const goHome = () => { window.location.hash = routeTo('home'); };
+  const openLesson = useCallback((id: string) => { window.location.hash = routeTo('lesson', id); }, []);
+  const goHome = useCallback(() => { window.location.hash = routeTo('home'); }, []);
   return <AppShell route={route} worlds={worlds} lessons={lessons} progress={progress} onOpenLesson={openLesson} onBack={goHome} />;
 }
 
