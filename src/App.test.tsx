@@ -32,6 +32,7 @@ describe('application shell', () => {
     expect(screen.getByRole('region', { name: /learning loop animation/i })).toBeInTheDocument();
     expect(screen.getByText('typescript')).toBeInTheDocument();
     expect(screen.getByText('csharp')).toBeInTheDocument();
+    expect(screen.getByRole('table', { name: /how typescript, c#, and rust divide memory responsibility/i })).toBeInTheDocument();
   });
 
   it('renders an MDX lesson and its simulation workspace', () => {
@@ -42,11 +43,35 @@ describe('application shell', () => {
     expect(screen.getAllByRole('region', { name: /binary playground/i }).length).toBeGreaterThan(0);
   });
 
+  it('shows a continue learning card when a learner has started a lesson', () => {
+    window.localStorage.setItem('rust-lab-progress', JSON.stringify({
+      schemaVersion: 1,
+      lessons: { 'start-here': { status: 'learning', quizScore: null, completedChallenges: [], completedExercises: [], reviewConcepts: [] } },
+      lastUpdated: new Date().toISOString(),
+    }));
+    window.location.hash = '#/';
+    render(<App />);
+
+    expect(screen.getByRole('region', { name: /continue learning/i })).toBeInTheDocument();
+    expect(screen.getByText(/why build a mental model/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /resume lesson/i })).toBeInTheDocument();
+  });
+
+  it('shows lesson position and keeps the next lesson gated until completion', () => {
+    window.location.hash = '#/lesson/start-here';
+    render(<App />);
+
+    expect(screen.getByRole('navigation', { name: /lesson navigation/i })).toBeInTheDocument();
+    expect(screen.getByText(/lesson 1 of 10/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /next lesson: bits and bytes/i })).toBeDisabled();
+  });
+
   it('keeps the learner on the lesson until its exercises are passed', async () => {
     window.location.hash = '#/lesson/start-here';
     render(<App />);
 
     fireEvent.click(screen.getByRole('button', { name: /to memorize rust syntax/i }));
+    fireEvent.change(screen.getByRole('textbox', { name: /reflection for start-here-01/i }), { target: { value: 'The model shows why the prediction is wrong.' } });
     fireEvent.click(screen.getByRole('button', { name: /mark challenge complete/i }));
     fireEvent.click(screen.getByRole('button', { name: /complete lesson/i }));
 
@@ -60,6 +85,7 @@ describe('application shell', () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole('button', { name: /to predict what the computer and compiler are doing/i }));
+    fireEvent.change(screen.getByRole('textbox', { name: /reflection for start-here-01/i }), { target: { value: 'The model makes the compiler behavior predictable.' } });
     fireEvent.click(screen.getByRole('button', { name: /mark challenge complete/i }));
     fireEvent.click(screen.getByRole('button', { name: /complete lesson/i }));
 
@@ -72,10 +98,25 @@ describe('application shell', () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole('button', { name: /to predict what the computer and compiler are doing/i }));
+    fireEvent.change(screen.getByRole('textbox', { name: /reflection for start-here-01/i }), { target: { value: 'The model makes the compiler behavior predictable.' } });
     fireEvent.click(screen.getByRole('button', { name: /mark challenge complete/i }));
     fireEvent.click(screen.getByRole('button', { name: /complete lesson/i }));
 
     expect(screen.getByText(/challenge complete/i)).toBeInTheDocument();
+  });
+
+  it('requires a written reflection before recording a challenge', () => {
+    window.location.hash = '#/lesson/start-here';
+    render(<App />);
+
+    const challengeButton = screen.getByRole('button', { name: /mark challenge complete/i });
+    expect(challengeButton).toBeDisabled();
+
+    fireEvent.change(screen.getByRole('textbox', { name: /reflection for start-here-01/i }), { target: { value: 'The mental model connects data, access, and lifetime.' } });
+
+    expect(challengeButton).toBeEnabled();
+    fireEvent.click(challengeButton);
+    expect(screen.getByRole('button', { name: 'Recorded' })).toBeInTheDocument();
   });
 
   it('persists the selected theme from the navigation menu', () => {

@@ -46,11 +46,7 @@ Rust is designed around a different balance: keep control over representation, p
 
 The point is not that one language is universally better. Each language is ergonomic for a different set of priorities. Here, ergonomics means how naturally a language helps you express your intent and how much machinery it asks you to understand to do so safely.
 
-| Language | What feels easy at first | What the runtime or compiler handles | What you learn to reason about |
-| --- | --- | --- | --- |
-| TypeScript | Building application behavior quickly with objects and references | The JavaScript runtime and garbage collector manage object memory | Types, module boundaries, async behavior, and runtime limits |
-| C# | Expressing rich application and domain code with a large standard library | The .NET runtime and garbage collector manage most object memory | Types, allocations, async behavior, and explicit resource patterns such as `using` |
-| Rust | Writing code with direct control and strong compile-time guarantees | The compiler checks ownership, borrowing, and lifetimes; values are cleaned up deterministically | Where data lives, who owns it, who may access it, and how long it is valid |
+<LanguageComparison />
 
 The difference becomes clearer with a simple question: what happens when a value is passed to another part of the program?
 

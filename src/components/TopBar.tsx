@@ -16,7 +16,7 @@ export function TopBar() {
         <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">
           <div className="hidden items-center gap-3 sm:flex">
             <span className="rounded-full border border-emerald-300/20 bg-emerald-300/5 px-3 py-1 text-emerald-300">static lab</span>
-            <span>local progress</span>
+            <span>progress saved on this device</span>
           </div>
           <ThemeMenu />
         </div>

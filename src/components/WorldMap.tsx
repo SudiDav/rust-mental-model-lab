@@ -3,6 +3,7 @@ import type { LessonRecord, WorldRecord } from '../content/types';
 import type { ProgressState } from '../learning/progress';
 import { OrientationPanel } from './OrientationPanel';
 import { WorldCard } from './WorldCard';
+import { ContinueLearning } from './ContinueLearning';
 
 interface Props { worlds: WorldRecord[]; lessons: LessonRecord[]; progress: ProgressState; onOpenLesson: (id: string) => void; focusWorldId?: string; }
 
@@ -17,6 +18,7 @@ export function WorldMap({ worlds, lessons, progress, onOpenLesson, focusWorldId
         <p className="mt-4 text-base leading-7 text-slate-400">Start with the physical ingredients of a computer, then follow data into processes, stacks, heaps, ownership, borrowing, lifetimes, and concurrency.</p>
       </div>
       {!focusWorldId && <OrientationPanel onOpenLesson={onOpenLesson} />}
+      {!focusWorldId && <ContinueLearning lessons={lessons} progress={progress} onOpenLesson={onOpenLesson} />}
       <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {visibleWorlds.map((world) => <WorldCard key={world.id} world={world} lessons={lessons} progress={progress} onOpenLesson={onOpenLesson} />)}
       </div>

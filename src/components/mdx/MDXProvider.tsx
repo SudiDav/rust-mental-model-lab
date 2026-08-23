@@ -5,6 +5,7 @@ import { CodeBlock } from '../CodeBlock';
 import { Challenge, Concept, MasteryCheck, MentalModel, Predict, Reveal, Simulation, UnderTheHood } from './EducationalComponents';
 import { LessonExerciseProvider } from './LessonExerciseContext';
 import { LearningLoop } from './LearningLoop';
+import { LanguageComparison } from '../LanguageComparison';
 
 function getCodeLanguage(children: ReactNode): string {
   if (!isValidElement<{ className?: string }>(children)) return 'rust';
@@ -23,7 +24,7 @@ export function LessonMDXProvider({ children, lessonId, nextLessonTitle, onCompl
     Concept, MentalModel, Simulation, Reveal, UnderTheHood,
     Predict: (props: { question: string; options: string[]; answer: string }) => <Predict lessonId={lessonId} {...props} />,
     Challenge: (props: { id: string }) => <Challenge lessonId={lessonId} {...props} />,
-    LearningLoop,
+    LearningLoop, LanguageComparison,
     MasteryCheck: (props: Record<string, unknown>) => <MasteryCheck lessonId={lessonId} nextLessonTitle={nextLessonTitle} onComplete={onComplete} {...props} />,
     pre: (props: Record<string, unknown>) => <CodeBlock language={getCodeLanguage(props.children as ReactNode)}>{props.children as ReactNode}</CodeBlock>,
   } as unknown as Record<string, ComponentType<any>>), [lessonId, nextLessonTitle, onComplete]);

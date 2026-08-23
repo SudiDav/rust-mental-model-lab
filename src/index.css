@@ -84,6 +84,41 @@ body {
   background: rgb(var(--color-ink));
 }
 
+.lesson-content > p {
+  max-width: 72ch;
+  margin-top: 1.25rem;
+  color: rgb(var(--color-slate-300));
+  line-height: 1.85;
+}
+
+.lesson-content > h2 {
+  margin-top: 3.5rem;
+  font-size: 1.5rem;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: rgb(var(--color-slate-100));
+}
+
+.lesson-content > h3 {
+  margin-top: 2.25rem;
+  font-size: 1.1rem;
+  line-height: 1.35;
+  color: rgb(var(--color-slate-100));
+}
+
+.lesson-content > ol,
+.lesson-content > ul {
+  max-width: 68ch;
+  margin-top: 1.25rem;
+  padding-left: 1.5rem;
+  color: rgb(var(--color-slate-300));
+  line-height: 1.85;
+}
+
+.lesson-content > pre {
+  margin-top: 1.5rem;
+}
+
 button,
 a {
   -webkit-tap-highlight-color: transparent;
