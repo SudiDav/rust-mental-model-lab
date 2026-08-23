@@ -25,6 +25,10 @@
   --color-ink: 248 250 252;
   --color-panel: 255 255 255;
   --color-line: 203 213 225;
+  --color-cyan-text: 21 94 117;
+  --color-amber-text: 146 64 14;
+  --color-emerald-text: 4 120 87;
+  --color-rose-text: 190 18 60;
   --color-slate-50: 15 23 42;
   --color-slate-100: 15 23 42;
   --color-slate-200: 30 41 59;
@@ -33,6 +37,32 @@
   --color-slate-500: 100 116 139;
   --color-slate-600: 100 116 139;
   color-scheme: light;
+}
+
+:root[data-theme="light"] .text-cyan-50,
+:root[data-theme="light"] .text-cyan-100,
+:root[data-theme="light"] .text-cyan-200,
+:root[data-theme="light"] .text-cyan-300,
+:root[data-theme="light"] .text-cyan-300\/70,
+:root[data-theme="light"] .text-cyan-300\/80 {
+  color: rgb(var(--color-cyan-text));
+}
+
+:root[data-theme="light"] .text-amber-100,
+:root[data-theme="light"] .text-amber-200,
+:root[data-theme="light"] .text-amber-200\/80,
+:root[data-theme="light"] .text-amber-300,
+:root[data-theme="light"] .text-amber-300\/90 {
+  color: rgb(var(--color-amber-text));
+}
+
+:root[data-theme="light"] .text-emerald-200,
+:root[data-theme="light"] .text-emerald-300 {
+  color: rgb(var(--color-emerald-text));
+}
+
+:root[data-theme="light"] .text-rose-200 {
+  color: rgb(var(--color-rose-text));
 }
 
 * {
