@@ -1,0 +1,30 @@
+.lesson-diagram { margin-block: 2.5rem; border: 1px solid rgb(var(--color-line)); border-radius: 18px; background: rgb(var(--color-panel)); color: rgb(var(--color-slate-200)); overflow: hidden; scroll-margin-top: 24px; }
+.lesson-diagram__header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 24px 24px 0; }
+.lesson-diagram__header p { font-size: 0.8rem; color: rgb(var(--color-slate-400)); }
+.lesson-diagram__header h2 { margin-top: 5px; font-size: clamp(1.25rem, 2vw, 1.7rem); font-weight: 650; letter-spacing: -0.025em; }
+.lesson-diagram a { color: rgb(var(--color-slate-200)); text-decoration: underline; text-underline-offset: 4px; }
+.lesson-diagram__header a { flex-shrink: 0; font-size: 0.85rem; }
+.lesson-diagram__introduction { padding: 12px 24px 20px; max-width: 85ch; font-size: 0.9rem; line-height: 1.8; color: rgb(var(--color-slate-300)); }
+.lesson-diagram__summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; padding: 0 24px 26px; list-style: none; }
+.lesson-diagram__summary li { display: flex; gap: 10px; align-items: flex-start; }
+.lesson-diagram__summary li > span { display: grid; place-items: center; flex: 0 0 26px; height: 26px; border: 1px solid rgb(var(--color-line)); border-radius: 50%; font-size: 0.75rem; }
+.lesson-diagram__summary h3 { margin-bottom: 8px; font-size: 0.9rem; font-weight: 650; }
+.lesson-diagram__summary p { color: rgb(var(--color-slate-400)); font-size: 0.8rem; line-height: 1.7; }
+.lesson-diagram__explorer { border-top: 1px solid rgb(var(--color-line)); }
+.lesson-diagram__explorer summary { padding: 18px 24px; cursor: pointer; font-size: 0.9rem; font-weight: 600; }
+.lesson-diagram__instructions { padding: 0 24px 15px; max-width: 95ch; font-size: 0.8rem; line-height: 1.7; color: rgb(var(--color-slate-300)); }
+.lesson-diagram__chapters { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 24px 20px; }
+.lesson-diagram__chapters button { padding: 9px 13px; border: 1px solid rgb(var(--color-line)); border-radius: 8px; font-size: 0.8rem; }
+.lesson-diagram__chapters button:hover { color: rgb(var(--color-slate-100)); background: rgb(var(--color-slate-400) / 0.12); border-color: rgb(var(--color-slate-400)); }
+.lesson-diagram iframe { display: block; width: 100%; height: 800px; border: 0; border-top: 1px solid rgb(var(--color-line)); background: rgb(var(--color-ink)); }
+.lesson-diagram__footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 16px 24px; border-top: 1px solid rgb(var(--color-line)); color: rgb(var(--color-slate-400)); font-size: 0.75rem; line-height: 1.7; }
+.lesson-diagram summary:focus-visible, .lesson-diagram a:focus-visible, .lesson-diagram button:focus-visible { outline: 2px solid rgb(var(--color-slate-200)); outline-offset: -2px; }
+@media (max-width: 1000px) { .lesson-diagram__summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) {
+  .lesson-diagram__header { flex-direction: column; align-items: flex-start; padding: 18px 14px 0; }
+  .lesson-diagram__introduction { padding: 12px 14px 18px; }
+  .lesson-diagram__summary { grid-template-columns: minmax(0, 1fr); padding: 0 14px 20px; }
+  .lesson-diagram__explorer summary, .lesson-diagram__footer { padding: 16px 14px; }
+  .lesson-diagram__instructions, .lesson-diagram__chapters { padding-inline: 14px; }
+  .lesson-diagram iframe { height: 660px; }
+}

@@ -58,3 +58,24 @@ Both predictions and reaching the final execution step register with the lesson�
 For a standalone local demo, start Vite and open `/rust-mental-model-lab/memory-lab-preview.html`. This development-only entry uses in-memory challenge results and does not touch course progress. The normal production build still has a single entry (`index.html`); the preview does not bypass lesson prerequisites on GitHub Pages.
 
 Implementation references: [Three.js fundamentals](https://threejs.org/manual/en/fundamentals.html), [resource cleanup](https://threejs.org/manual/en/cleanup.html), and [Rust ownership](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html).
+
+## Lesson diagrams with Archify
+
+`<LessonDiagram diagram="life-of-a-string" />` embeds the reviewed lifecycle diagram in the Stack and Heap lesson and the local preview. It includes a text summary drawn from the same simulation steps, three guided chapters, and a link to the complete viewer. Opening the explorer loads a sandboxed iframe; closing it unloads the viewer. The iframe receives the lesson theme and cannot access the parent page’s saved progress. Its own theme control is temporary; changing the lesson theme reloads the selected chapter. Export/download controls are available in the full viewer.
+
+The editable JSON lives in `content/diagrams/`. The checked HTML, portable delivery receipt, and license are in `public/diagrams/`. `tooling/archify.json` pins the generator to an exact upstream commit. Production builds only check the committed artifacts; they do not install Archify, call a generation service, or fetch the generator. The upstream viewer optionally loads a web font and falls back to system fonts if it is unavailable.
+
+To regenerate after editing the diagram or its simulation model, use a clean checkout of the pinned generator (no global skill installation is needed):
+
+```bash
+git clone --filter=blob:none --sparse https://github.com/tt-a1i/archify.git /tmp/archify-authoring
+git -C /tmp/archify-authoring sparse-checkout set archify
+git -C /tmp/archify-authoring checkout d8e4daf2610d512821365f41b139d874b29efe81
+npm run diagrams:render -- --archify-root /tmp/archify-authoring
+npm run validate:diagrams
+node --test scripts/diagrams.test.mjs
+```
+
+Review the resulting HTML in both themes and run Archify’s `visual-check` before committing the source and generated artifacts together. A passing generator receipt checks diagram structure/layout; it does not establish Rust correctness. The String example and its predictions still depend on the simulation tests and content review. Explicit transitions connect every main phase so guided stories and route tracing use real graph edges; the renderer’s decorative rail alone is not a semantic relationship. Relationships use explanatory notes because the endpoint labels already express the state changes.
+
+The generated viewer includes Archify code under the MIT license. Keep `public/diagrams/ARCHIFY-LICENSE.txt` with distributed copies. This example uses no third-party brand marks.

@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from './theme/ThemeProvider';
 import { ThemeMenu } from './components/ThemeMenu';
 import { MemoryLabPreview } from './components/memory-lab/MemoryLab';
+import { LessonDiagram } from './components/LessonDiagram';
 import './index.css';
 
 // This separate HTML entry is served by Vite during development, not the Pages build.
@@ -13,5 +14,6 @@ createRoot(document.getElementById('root')!).render(<StrictMode><ThemeProvider>
       <ThemeMenu />
     </header>
     <MemoryLabPreview />
+    <LessonDiagram diagram="life-of-a-string" />
   </main>
 </ThemeProvider></StrictMode>);

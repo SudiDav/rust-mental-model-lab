@@ -29,6 +29,7 @@ describe('application shell', () => {
     window.location.hash = '#/lesson/stack-and-heap';
     render(<App />);
     expect(screen.getAllByRole('region', { name: 'A String’s journey' })).toHaveLength(1);
+    expect(screen.getByRole('region', { name: 'The life of a String' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Complete lesson' }));
     await waitFor(() => expect(window.location.hash).toBe('#/lesson/pointers-references'), { timeout: 2000 });
     await screen.findByRole('heading', { name: 'Pointers and References' });
