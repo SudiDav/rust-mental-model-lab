@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "diagram": "life-of-a-string",
+  "diagramType": "lifecycle",
+  "generator": {
+    "repository": "https://github.com/tt-a1i/archify.git",
+    "revision": "d8e4daf2610d512821365f41b139d874b29efe81",
+    "version": "2.17.0-dev.1"
+  },
+  "specification": {
+    "sha256": "1085bae0e06d3775a46d712e8445d3e5cac79a215a92ca0721772497d8ac57f6",
+    "bytes": 3524
+  },
+  "artifact": {
+    "sha256": "d6fdba09fb818791591ce61038b0c216de19497830ecd66358cb293b251e3113",
+    "bytes": 707647
+  },
+  "model": {
+    "sha256": "e52bb86c6d3288b5edf4f6f4ad636e99d2ba1213fbd5fe72f3966326bcf8273f",
+    "bytes": 6923
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  }
+}

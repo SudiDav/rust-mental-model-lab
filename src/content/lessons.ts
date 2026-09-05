@@ -28,7 +28,7 @@ const publishedLessons: LessonRecord[] = [
   {
     id: 'stack-and-heap', slug: 'stack-and-heap', title: 'Stack and Heap', world: 'stack-heap', order: 1,
     difficulty: 'beginner', estimatedMinutes: 25, prerequisites: ['program-memory'],
-    objectives: ['Follow a stack value through a pointer to bytes in a conceptual heap allocation.'],
+    objectives: ['Follow a stack value through a pointer to bytes in a conceptual heap allocation.', 'Predict how a function call transfers ownership without copying the heap bytes.', 'Explain when a String is dropped and a stack frame is removed.'],
     concepts: ['allocation', 'pointer', 'length', 'capacity', 'scope'], simulation: { type: 'stack-heap', scenario: 'string-allocation' }, status: 'published',
   },
   {

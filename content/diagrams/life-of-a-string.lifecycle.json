@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "The life of a String",
+    "locale": "en",
+    "viewBox": [980, 632],
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      { "id": "whole-story", "label": "Follow the String", "focus": ["string-created", "owner-moved", "string-read", "owner-dropped", "allocation-released"], "note": "Follow the same String through the program in the 3D lab. A move changes its owner, not its heap bytes." },
+      { "id": "ownership-handoff", "label": "Understand the move", "focus": ["string-created", "owner-moved", "name-unavailable"], "note": "show(name) transfers ownership to message. name cannot be used again, and no second String allocation is created." },
+      { "id": "scope-cleanup", "label": "Watch the cleanup", "focus": ["string-read", "owner-dropped", "allocation-released", "main-continues"], "note": "Printing borrows message. Returning from show drops it, releases its bytes, and resumes main with count still available." }
+    ]
+  },
+  "lanes": [
+    { "id": "main", "label": "One String, from creation to cleanup" },
+    { "id": "caller", "label": "Meanwhile, in the caller" },
+    { "id": "terminal", "label": "After the String is dropped" }
+  ],
+  "states": [
+    { "id": "string-created", "type": "start", "label": "Create", "sublabel": "name owns it", "lane": "main", "col": 0, "step": "1" },
+    { "id": "owner-moved", "type": "active", "label": "Move", "sublabel": "message owns it", "lane": "main", "col": 1, "step": "2" },
+    { "id": "string-read", "type": "active", "label": "Read", "sublabel": "println! borrows", "lane": "main", "col": 2, "step": "3" },
+    { "id": "owner-dropped", "type": "active", "label": "Drop", "sublabel": "show returns", "lane": "main", "col": 3, "step": "4" },
+    { "id": "allocation-released", "type": "success", "label": "Released", "sublabel": "no live bytes", "lane": "main", "col": 4, "step": "5" },
+    { "id": "name-unavailable", "type": "neutral", "label": "name moved", "sublabel": "cannot reuse it", "lane": "caller", "col": 0 },
+    { "id": "main-continues", "type": "neutral", "label": "main resumes", "sublabel": "count is still 2", "lane": "terminal", "col": 2 }
+  ],
+  "transitions": [
+    { "id": "creation-to-move", "from": "string-created", "to": "owner-moved", "variant": "emphasis", "note": "show(name) transfers the String from name to the parameter message without cloning its heap allocation." },
+    { "id": "move-to-read", "from": "owner-moved", "to": "string-read", "variant": "emphasis", "route": "straight", "note": "println! temporarily borrows message to read the bytes. message remains the owner." },
+    { "id": "read-to-drop", "from": "string-read", "to": "owner-dropped", "variant": "emphasis", "note": "At the end of show, message goes out of scope and its String is dropped." },
+    { "id": "drop-to-release", "from": "owner-dropped", "to": "allocation-released", "variant": "emphasis", "note": "Dropping this String releases its allocation. No garbage-collection pass is needed." },
+    { "id": "move-invalidates-name", "from": "owner-moved", "to": "name-unavailable", "note": "Moving name into show makes the old binding unavailable. This is a compile-time rule, not a runtime flag." },
+    { "id": "return-resumes-caller", "from": "allocation-released", "to": "main-continues", "note": "After message is dropped and show returns, main prints count. The moved String does not automatically return to name." }
+  ],
+  "cards": []
+}

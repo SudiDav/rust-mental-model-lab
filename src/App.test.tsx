@@ -1,6 +1,9 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import App from './App';
+import { MEMORY_CHECKPOINTS, MEMORY_TOUR_EXERCISE } from './simulations/memory-lab';
+
+vi.mock('./components/memory-lab/memory-scene', () => ({ createMemoryScene: () => ({ update: () => {}, dispose: () => {}, resetCamera: () => {} }) }));
 
 beforeEach(() => {
   window.location.hash = '';
@@ -17,6 +20,23 @@ afterEach(() => {
 });
 
 describe('application shell', () => {
+  it('starts the next lesson with only its own exercise requirements after the memory lab', async () => {
+    const progress = { status: 'completed', quizScore: null, completedChallenges: [], completedExercises: [], reviewConcepts: [] };
+    localStorage.setItem('rust-lab-progress', JSON.stringify({ schemaVersion: 1, lessons: {
+      'program-memory': progress,
+      'stack-and-heap': { ...progress, status: 'learning', completedExercises: [...MEMORY_CHECKPOINTS.map((checkpoint) => checkpoint.id), MEMORY_TOUR_EXERCISE, 'challenge:stack-and-heap-01'] },
+    } }));
+    window.location.hash = '#/lesson/stack-and-heap';
+    render(<App />);
+    expect(screen.getAllByRole('region', { name: 'A String’s journey' })).toHaveLength(1);
+    expect(screen.getByRole('region', { name: 'The life of a String' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Complete lesson' }));
+    await waitFor(() => expect(window.location.hash).toBe('#/lesson/pointers-references'), { timeout: 2000 });
+    await screen.findByRole('heading', { name: 'Pointers and References' });
+    fireEvent.click(screen.getByRole('button', { name: 'Complete lesson' }));
+    expect(screen.getByText('Complete the remaining exercises before continuing (2 left).')).toBeInTheDocument();
+  });
+
   it('shows the learning map and planned worlds', () => {
     window.location.hash = '#/';
     render(<App />);

@@ -1,0 +1,16 @@
+{
+  "repository": "https://github.com/tt-a1i/archify.git",
+  "revision": "d8e4daf2610d512821365f41b139d874b29efe81",
+  "version": "2.17.0-dev.1",
+  "license": "MIT",
+  "diagrams": [
+    {
+      "id": "life-of-a-string",
+      "type": "lifecycle",
+      "source": "content/diagrams/life-of-a-string.lifecycle.json",
+      "model": "src/simulations/memory-lab.ts",
+      "artifact": "public/diagrams/life-of-a-string.html",
+      "receipt": "public/diagrams/life-of-a-string.receipt.json"
+    }
+  ]
+}
