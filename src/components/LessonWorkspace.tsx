@@ -13,6 +13,7 @@ export function LessonWorkspace({ lesson, nextLesson, previousLesson, lessonInde
   const isCompleted = progress.lessons[lesson.id]?.status === 'completed';
   const curriculumPercent = Math.round(((lessonIndex + (isCompleted ? 1 : 0)) / totalLessons) * 100);
   const Content = lesson.component;
+  const hasMemoryLab = lesson.id === 'stack-and-heap';
   useEffect(() => { if (unlocked.unlocked) markLearning(lesson.id); }, [lesson.id, unlocked.unlocked]);
   return <section className="mx-auto max-w-[1500px] px-5 py-8 md:px-8 md:py-12">
     <button onClick={onBack} className="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500 transition hover:text-cyan-200">← Back to learning map</button>
@@ -23,15 +24,15 @@ export function LessonWorkspace({ lesson, nextLesson, previousLesson, lessonInde
       </div>
       <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-slate-950/50" aria-label={`${curriculumPercent}% of the curriculum complete`} role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={curriculumPercent}><div className="h-full rounded-full bg-gradient-to-r from-cyan-300 to-emerald-300 transition-[width] duration-500" style={{ width: `${curriculumPercent}%` }} /></div>
     </div>
-    <div className="mt-7 grid gap-8 xl:grid-cols-[minmax(0,1fr)_minmax(360px,0.72fr)]">
+    <div className={hasMemoryLab ? 'lesson-memory-workspace mt-7' : 'mt-7 grid gap-8 xl:grid-cols-[minmax(0,1fr)_minmax(360px,0.72fr)]'}>
       <article className="lesson-content lesson-enter min-w-0 rounded-2xl border border-line bg-panel/60 p-6 md:p-10">
         <div className="flex flex-wrap items-center gap-3 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500"><span>{lesson.world}</span><span>·</span><span>{lesson.estimatedMinutes} min</span><span>·</span><span>{lesson.difficulty}</span></div>
-        {!unlocked.unlocked ? <LockedLesson explanation={unlocked.explanation} /> : Content ? <LessonMDXProvider lessonId={lesson.id} nextLessonTitle={nextLesson?.title} onComplete={onLessonComplete}><Content /></LessonMDXProvider> : <p className="mt-6 text-slate-400">This lesson is being prepared.</p>}
+        {!unlocked.unlocked ? <LockedLesson explanation={unlocked.explanation} /> : Content ? <LessonMDXProvider key={lesson.id} lessonId={lesson.id} nextLessonTitle={nextLesson?.title} onComplete={onLessonComplete}><Content /></LessonMDXProvider> : <p className="mt-6 text-slate-400">This lesson is being prepared.</p>}
       </article>
-      <aside className="space-y-5 xl:sticky xl:top-6 xl:self-start">
+      {!hasMemoryLab && <aside className="space-y-5 xl:sticky xl:top-6 xl:self-start">
         <SimulationPanel type={lesson.simulation.type} scenario={lesson.simulation.scenario} />
         <div className="rounded-2xl border border-line bg-panel p-5"><p className="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">Lesson intent</p><ul className="mt-4 space-y-3 text-sm leading-6 text-slate-300">{lesson.objectives.map((objective) => <li key={objective} className="flex gap-3"><span className="text-cyan-300">→</span><span>{objective}</span></li>)}</ul></div>
-      </aside>
+      </aside>}
     </div>
     <nav aria-label="Lesson navigation" className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-line bg-panel p-4">
       <button disabled={!previousLesson} onClick={() => previousLesson && onOpenLesson(previousLesson.id)} className="rounded-lg border border-line px-4 py-2.5 text-left transition hover:border-cyan-300/35 disabled:cursor-not-allowed disabled:opacity-40"><span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-slate-500">Previous</span><span className="mt-1 block text-sm text-slate-200">{previousLesson ? `← ${previousLesson.title}` : 'Start of the path'}</span></button>

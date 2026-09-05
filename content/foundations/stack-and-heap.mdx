@@ -9,6 +9,8 @@ prerequisites:
   - program-memory
 objectives:
   - Follow a stack value through a pointer to bytes in a conceptual heap allocation.
+  - Predict how a function call transfers ownership without copying the heap bytes.
+  - Explain when a String is dropped and a stack frame is removed.
 concepts:
   - allocation
   - pointer
@@ -23,16 +25,35 @@ status: published
 
 # Stack and Heap
 
-A `String` value can keep a small descriptor on the stack while its variable-sized bytes live in a heap allocation.
+You have seen where a program keeps its data. Now let’s watch that data live a little: create a name, send it to another function, and see what gets cleaned up when the function finishes.
 
-<Concept>The stack stores function-local frames. The heap stores dynamic allocations whose size or lifetime needs more flexibility.</Concept>
+You control the pace. Step forward, inspect a box, or rewind until the relationship makes sense. At two points, the lab will pause for your prediction. Getting one wrong is a chance to look again—you can always retry.
 
-<MentalModel>Follow the pointer: variable → pointer → address → bytes.</MentalModel>
+<Concept>A stack frame belongs to a function call and holds its local values in this model. A heap allocation holds dynamic data, such as the UTF-8 bytes in a String. Stack and heap are regions of a program’s memory, not separate physical devices.</Concept>
 
-<Simulation type="stack-heap" scenario="string-allocation" />
+## Meet the owner and the bytes
 
-<UnderTheHood>The pointer, length, and capacity shown here are a conceptual view of a Rust `String` representation.</UnderTheHood>
+Think of a `String` as a small descriptor and an allocation it owns. The descriptor has a **pointer** to the bytes, a **length** saying how many bytes are in use, and a **capacity** saying how much space is available. We will draw the descriptor in a stack frame and the bytes on the heap.
+
+The example uses two functions. `main` creates the name, and `show` receives it as a parameter called `message`. Passing this String transfers ownership: the responsibility for eventually cleaning it up. You will explore ownership more deeply in a later lesson; here, watch where the data goes.
+
+<MemoryLab />
+
+## What should stick?
+
+- Calling a function adds a frame; returning removes that function’s frame first.
+- Moving the String changes its owner without cloning the heap bytes.
+- When the owner goes out of scope, the String is dropped and its allocation is released.
+- The number `count` remains available in `main` while the other function runs.
+
+<UnderTheHood>This is a deterministic walkthrough of the displayed program, not a general Rust interpreter. The address 0xA120 and the placement and sizes of boxes are illustrative. Rust does not guarantee that every local is physically on the stack: compiler optimizations may use registers or eliminate storage. The String’s field order is not shown as a guaranteed layout. Capacity is at least the byte length; allocator details can vary. Deallocation releases ownership of storage but does not promise to erase its old bytes. The “moved” ghost is a teaching aid, not a runtime flag.</UnderTheHood>
+
+For your reflection, explain why the bytes stay in place when `name` becomes `message`, and why they are released when `show` returns.
 
 <Challenge id="stack-and-heap-01" />
 
 <MasteryCheck />
+
+### Read further
+
+The [Rust Book’s ownership chapter](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html) explains the stack, heap, moves, and scope-based cleanup behind this model.
